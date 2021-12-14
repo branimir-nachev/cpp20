@@ -4,9 +4,9 @@
 #include <numeric>
 #include <iostream>
 #include <chrono>
-#include <stdlib.h>
+#include <cstdlib>
 #include <complex>
-#include <math.h>
+#include <cmath>
 #include <iomanip>
 #include <numbers>
 #include <map>
@@ -24,6 +24,52 @@ void do_work(std::promise<int> barrier)
     std::this_thread::sleep_for(std::chrono::seconds(2));
     barrier.set_value(1);
 }
+
+void f1(int n)
+{
+    for (int i = 0; i < 5; ++i) {
+        std::cout << "Thread 1 executing\n";
+        ++n;
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+}
+
+void f2(int& n)
+{
+    for (int i = 0; i < 5; ++i) {
+        std::cout << "Thread 2 executing\n";
+        ++n;
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+}
+
+class foo
+{
+public:
+    void bar()
+    {
+        for (int i = 0; i < 5; ++i) {
+            std::cout << "Thread 3 executing\n";
+            ++n;
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        }
+    }
+    int n = 0;
+};
+
+class baz
+{
+public:
+    void operator()()
+    {
+        for (int i = 0; i < 5; ++i) {
+            std::cout << "Thread 4 executing\n";
+            ++n;
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        }
+    }
+    int n = 0;
+};
 
 int main()
 {
@@ -83,4 +129,24 @@ int main()
     std::sort(numbers.begin(),numbers.end(),std::greater());
 
     std::cout << "Последният елемент от Вектора след сортирането е : " << numbers.back() << std::endl;
+
+    std::cout << "Малко текст на кирилилица !" <<  std::endl;
+
+    int n = 0;
+    foo f;
+    baz b;
+    std::thread t1; // t1 is not a thread
+    std::thread t2(f1, n + 1); // pass by value
+    std::thread t3(f2, std::ref(n)); // pass by reference
+    std::thread t4(std::move(t3)); // t4 is now running f2(). t3 is no longer a thread
+    std::thread t5(&foo::bar, &f); // t5 runs foo::bar() on object f
+    std::thread t6(b); // t6 runs baz::operator() on a copy of object b
+    t2.join();
+    t4.join();
+    t5.join();
+    t6.join();
+    std::cout << "Final value of n is " << n << '\n';
+    std::cout << "Final value of f.n (foo::n) is " << f.n << '\n';
+    std::cout << "Final value of b.n (baz::n) is " << b.n << '\n';
+
 }
