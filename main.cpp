@@ -83,5 +83,6 @@ int main()
     std::sort(numbers.begin(),numbers.end(),std::greater());
 
     std::cout << "Последният елемент от Вектора след сортирането е : " << numbers.back() << std::endl;
+    std::cout << "Още някакъв тест за кирилица !" << std::endl;
 
 }
