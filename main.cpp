@@ -149,4 +149,16 @@ int main()
     std::cout << "Final value of f.n (foo::n) is " << f.n << '\n';
     std::cout << "Final value of b.n (baz::n) is " << b.n << '\n';
 
+    std::cout << "Най-после нещо на български език !" << std::endl;
+
+    std::cout << "Малко принтове ... " << std::endl;
+    std::cout << "Няколко надписа на кирилица ... " << std::endl;
+    int a[2];
+    printf("\n hi\n");
+    a[20000]=10;
+
+    std::cout << "И още малко кирилица !" << std::endl;
+
+    std::cout << "Някакъв текст !" << std::endl;
+
 }
