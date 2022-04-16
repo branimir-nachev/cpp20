@@ -159,6 +159,6 @@ int main()
 
     std::cout << "И още малко кирилица !" << std::endl;
 
-    std::cout << "Някакъв текст !" << std::endl;
+    std::cout << "Някакъв пример за коментар !" << std::endl;
 
 }
